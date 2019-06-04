@@ -17,3 +17,6 @@ spec:
        - name: http
          port: 3000
       public: true
+      environmentConfig:
+        - environment: prod
+          replicas: 4
