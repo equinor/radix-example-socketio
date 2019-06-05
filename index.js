@@ -1,21 +1,23 @@
 var app = require("express")();
 var http = require("http").Server(app);
-var io = require("socket.io")(http);
+var io = require("socket.io")(http, {
+  allowRequest: (req, cb) => cb(0, true)
+});
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
 io.on("connection", function(socket) {
-  console.log("a user connected");
+  console.log("user connected", socket.id);
 
   socket.on("chat message", function(msg) {
-    console.log("message: ", msg);
+    console.log("message: ", msg, 'from: ', socket.id);
     io.emit('chat message', msg);
   });
 
   socket.on("disconnect", function() {
-    console.log("user disconnected");
+    console.log("user disconnected", socket.id);
   });
 });
 
