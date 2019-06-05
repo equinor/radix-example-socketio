@@ -19,4 +19,4 @@ spec:
       public: true
       environmentConfig:
         - environment: prod
-          replicas: 2
+          replicas: 4

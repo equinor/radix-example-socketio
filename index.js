@@ -1,6 +1,8 @@
 var app = require("express")();
 var http = require("http").Server(app);
-var io = require("socket.io")(http);
+var io = require("socket.io")(http, {
+  allowRequest: (req, next) => next(null, true)  // allow everything! 🎉
+});
 
 io.eio.verify = function(req, upgrade, fn) {
   // … and we ignore session validation, plus a few other catastrophic issues 🤯
