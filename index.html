@@ -107,6 +107,14 @@
           $("#messages").append($("<li>").text(msg.username + ': ' + msg.message));
         });
 
+        socket.on("user connected", function(id) {
+          $("#messages").append($("<li><em>").text('[connected: ' + id + ']'));
+        });
+
+        socket.on("user disconnected", function(id) {
+          $("#messages").append($("<li><em>").text('[disconnected: ' + id + ']'));
+        });
+
         socket.on("connect", function() {
           console.log("connected", Date());
 

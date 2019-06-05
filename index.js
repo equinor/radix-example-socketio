@@ -1,8 +1,11 @@
 var app = require("express")();
 var http = require("http").Server(app);
-var io = require("socket.io")(http, {
-  allowRequest: (req, cb) => cb(0, true)
-});
+var io = require("socket.io")(http);
+
+io.eio.verify = function(req, upgrade, fn) {
+  // … and we ignore session validation, plus a few other catastrophic issues 🤯
+  fn(null, true);
+}
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
@@ -10,6 +13,7 @@ app.get("/", function(req, res) {
 
 io.on("connection", function(socket) {
   console.log("user connected", socket.id);
+  io.emit("user connected", socket.id);
 
   socket.on("chat message", function(msg) {
     console.log("message: ", msg, 'from: ', socket.id);
@@ -18,6 +22,7 @@ io.on("connection", function(socket) {
 
   socket.on("disconnect", function() {
     console.log("user disconnected", socket.id);
+    io.emit("user disconnected", socket.id);
   });
 });
 
